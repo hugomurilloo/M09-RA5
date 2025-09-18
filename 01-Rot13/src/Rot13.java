@@ -32,7 +32,9 @@ public class Rot13 {
             for (int j = 0; j < abcArray.length; j++) {
                 if (c == abcArray[j]) {
                     int index = j + trece;
-                    while (index >= abcArray.length) index -= abcArray.length;
+                    while (index >= abcArray.length){
+                        index -= abcArray.length;
+                    }
                     resultado += abcArray[index];
                     trobat = true;
                     break;
