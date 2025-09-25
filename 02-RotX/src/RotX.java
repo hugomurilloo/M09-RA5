@@ -1,13 +1,13 @@
 public class RotX {
     //Variables
-    static char[] abc = "abcdefghijklmnopqrstuvwxyzçñáàèéíïòóúü".toCharArray();
-    static char[] abcMayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÁÀÈÉÍÏÒÓÚÜ".toCharArray();
+    static char[] abc = "abcdefghijklmnopqrstuvwxyzçñáàèéíìïòóúùü".toCharArray();
+    static char[] abcMayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÁÀÈÉÍÌÏÒÓÚÙÜ".toCharArray();
     
     //Main
     public static void main(String[] args) {
         String[] pruebas = {"ABC", "XYZ", "Hola, Mr. calçot", "Perdó, per tu què és?"};
         int[] rotacions = {0,2,4,6};
-        String frase = "Vkxjd, vkx zç wçú üy?";
+        String frase = "Ìwòvo, ìwò úù ïùi jó?";
 
         System.out.println("Xifrat");
         System.out.println("---------");
@@ -79,7 +79,7 @@ public class RotX {
     //Metodo
     public static String forcaBrutaRotX(String cadena) {
         char[] resultado = new char[cadena.length()];
-        int rot = 1;
+        int rot = 0;
         while (rot <= 39) {      
             for (int i = 0; i < cadena.length(); i++) {
                 char c = cadena.charAt(i);
