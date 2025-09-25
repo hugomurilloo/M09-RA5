@@ -1,7 +1,7 @@
 public class RotX {
     //Variables
-    static char[] abc = "abcdefghijklmnopqrstuvwxyzçñàèéíïòóúü".toCharArray();
-    static char[] abcMayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÀÈÉÍÏÒÓÚÜ".toCharArray();
+    static char[] abc = "abcdefghijklmnopqrstuvwxyzçñáàèéíïòóúü".toCharArray();
+    static char[] abcMayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÁÀÈÉÍÏÒÓÚÜ".toCharArray();
     
     //Main
     public static void main(String[] args) {
