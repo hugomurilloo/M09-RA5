@@ -1,69 +1,69 @@
 public class Rot13 {
-    static String abc = "abcdefghijklmnopqrstuvwxyzçñáàéèíìóòúùïü";
-    static String abcMayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÁÀÉÈÍÌÓÒÚÙÏÜ";
-
+    //Variables
+    static char[] abc = "abcdefghijklmnopqrstuvwxyzçñàèéíïòóúü".toCharArray();
+    static char[] abcMayus = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÀÈÉÍÏÒÓÚÜ".toCharArray();
+    
+    //Main
     public static void main(String[] args) {
-        if (args.length == 0) {
-            System.out.println("No hi ha cap text");
-            return;
-        }
-
+        String[] pruebas = {"ABC", "XYZ", "Hola, Mr. calçot", "Perdó, per tu què és?"};
+        
         System.out.println("Xifrat");
         System.out.println("---------");
-        for (String texto : args) {
-            System.out.println(texto + " => " + xifraRot13(texto));
+        for (String p : pruebas) {
+            System.out.println(p + " => " + xifraRot13(p));
         }
-
-        System.out.println();
-
-        System.out.println("Desxifrat");
+        
+        System.out.println("\nDesxifrat");
         System.out.println("---------");
-        for (String texto : args) {
-            System.out.println(xifraRot13(texto) + " => " + desxifraRot13(xifraRot13(texto)));
+        for (String p : pruebas) {
+            String cifrado = xifraRot13(p);
+            System.out.println(cifrado + " => " + desxifraRot13(cifrado));
         }
     }
-
-    public static String xifraRot13(String texto) {
-        String resultado = "";
-        int trece = 13;
-        for (int i = 0; i < texto.length(); i++) {
-            char c = texto.charAt(i);
-            int idx = abc.indexOf(c);
-            int idxMayus = abcMayus.indexOf(c);
-            if (idx != -1) {
-                int newIdx = idx + trece;
-                while (newIdx >= abc.length()) newIdx -= abc.length();
-                resultado += abc.charAt(newIdx);
-            } else if (idxMayus != -1) {
-                int newIdx = idxMayus + trece;
-                while (newIdx >= abcMayus.length()) newIdx -= abcMayus.length();
-                resultado += abcMayus.charAt(newIdx);
-            } else {
-                resultado += c;
+    // Metodo
+    public static String xifraRot13(String cadena) {
+        char[] resultado = new char[cadena.length()];
+        
+        for (int i = 0; i < cadena.length(); i++) {
+            char c = cadena.charAt(i);
+            resultado[i] = c;
+            
+            for (int j = 0; j < abc.length; j++) {
+                if (c == abc[j]) {
+                    resultado[i] = abc[(j + 13) % abc.length];
+                    break;
+                }
+                if (c == abcMayus[j]) {
+                    resultado[i] = abcMayus[(j + 13) % abcMayus.length];
+                    break;
+                }
             }
         }
-        return resultado;
+        return new String(resultado);
     }
-
-    public static String desxifraRot13(String texto) {
-        String resultado = "";
-        int trece = 13;
-        for (int i = 0; i < texto.length(); i++) {
-            char c = texto.charAt(i);
-            int idx = abc.indexOf(c);
-            int idxMayus = abcMayus.indexOf(c);
-            if (idx != -1) {
-                int newIdx = idx - trece;
-                while (newIdx < 0) newIdx += abc.length();
-                resultado += abc.charAt(newIdx);
-            } else if (idxMayus != -1) {
-                int newIdx = idxMayus - trece;
-                while (newIdx < 0) newIdx += abcMayus.length();
-                resultado += abcMayus.charAt(newIdx);
-            } else {
-                resultado += c;
+   
+    // Metodo
+    public static String desxifraRot13(String cadena) {
+        char[] resultado = new char[cadena.length()];
+        
+        for (int i = 0; i < cadena.length(); i++) {
+            char c = cadena.charAt(i);
+            resultado[i] = c;
+            
+            for (int j = 0; j < abc.length; j++) {
+                if (c == abc[j]) {
+                    resultado[i] = abc[(j - 13 + abc.length) % abc.length];
+                    break;
+                }
+                if (c == abcMayus[j]) {
+                    resultado[i] = abcMayus[(j - 13 + abcMayus.length) % abcMayus.length];
+                    break;
+                }
             }
         }
-        return resultado;
+        return new String(resultado);
     }
+
+    
+
 }
