@@ -3,18 +3,17 @@ import java.util.Collections;
 import java.util.Random;
 
 public class Polialfabetic {
-        static char[] alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÀÈÉÍÏÒÓÚÜ".toCharArray();
-        static Random randomNumbers = new Random();
-        static ArrayList<Character> alfabetList = new ArrayList<>();
-        static char[] permutacio;
+    static char[] alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÇÑÀÈÉÍÏÒÓÚÜ".toCharArray();
+    static Random randomNumbers = new Random();
+    static ArrayList<Character> alfabetList = new ArrayList<>();
+    static char[] permutacio;
+    
+    static long clauSecreta = 8;
 
-
-
-        static long clauSecreta = 8;
     public static void main(String[] args) {
         String msgs[] = {"Test 01 àrbritre, coixí, Perímetre",
-        "Test 02 Taüll, DíA, año",
-        "Test 03 Peça, Órrius, Bòvila"};
+        "Test 02 Taüll, DÍA, año",
+        "Test 03 Peça, Òrrius, Bòvila"};
         String msgsXifrats[] = new String[msgs.length];
 
         System.out.println("Xifratge:\n---");
@@ -31,15 +30,17 @@ public class Polialfabetic {
             System.out.printf("%-34s -> %s%n", msgsXifrats[i], msg);
         }
     }
+
     public static void initRandom(long clauSecreta) {
         randomNumbers = new Random(clauSecreta); 
     }
 
     public static String xifraPoliAlfa(String msg){
-        permutaAlfabet();
         char[] resultado = new char[msg.length()];
         
         for (int i = 0; i < msg.length(); i++) {
+            permutaAlfabet();
+            
             char caracter = msg.charAt(i);
             char caracterMayus = Character.toUpperCase(caracter);
 
@@ -50,6 +51,7 @@ public class Polialfabetic {
                     break;
                 }
             }
+            
             if (indice != -1) {
                 char cifrado = permutacio[indice];
                 if (Character.isLowerCase(caracter)) {
@@ -66,9 +68,11 @@ public class Polialfabetic {
     }
 
     public static String desxifraPoliAlfa(String msgXifrat){
-
         char[] resultado = new char[msgXifrat.length()];
+        
         for (int i = 0; i < msgXifrat.length(); i++) {
+            permutaAlfabet();
+            
             char caracter = msgXifrat.charAt(i);
             char caracterMayus = Character.toUpperCase(caracter);
             
@@ -93,23 +97,18 @@ public class Polialfabetic {
         }
         
         return new String(resultado);  
-
     }
 
     public static void permutaAlfabet(){
         alfabetList.clear();
-        for(char c: alfabet){
+        for(char c : alfabet){
             alfabetList.add(c);
         }
         Collections.shuffle(alfabetList, randomNumbers);
-        permutacio = permutaAlfabet(alfabetList);
-    }
-
-    public static char[] permutaAlfabet(ArrayList<Character> lista) {
-        char[] resultado = new char[lista.size()];
-        for (int i = 0; i < lista.size(); i++) {
-            resultado[i] = lista.get(i);
+        
+        permutacio = new char[alfabetList.size()];
+        for (int i = 0; i < alfabetList.size(); i++) {
+            permutacio[i] = alfabetList.get(i);
         }
-        return resultado;
     }
 }
