@@ -52,18 +52,36 @@ public class AES {
     //DESXIFRAR
     public static String desxifraAES(byte[] bMsgXifrat, String password) throws Exception{
     
-    // Extreure l'IV.
-    
-    // Extreure la part xifrada.
-    
-    // Fer hash de la clau
-    
-    // Desxifrar.
-    
-    // return String desxifrat
+        if (bMsgXifrat == null || bMsgXifrat.length <= MIDA_IV) {
+            throw new IllegalArgumentException("Dades xifrades no vàlides");
+        }
 
+        // Extreure l'IV.
+        byte[] ivBytes = new byte[MIDA_IV];
+        for (int i = 0; i < MIDA_IV; i++) {
+            ivBytes[i] = bMsgXifrat[i];
+        }
+        IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
 
-        return "EstoEstaEnProceso";
+        // Extreure la part xifrada.
+        int encLen = bMsgXifrat.length - MIDA_IV;
+        byte[] encrypted = new byte[encLen];
+        for (int i = 0; i < encLen; i++) {
+            encrypted[i] = bMsgXifrat[MIDA_IV + i];
+        }
+
+        // Fer hash de la clau
+        MessageDigest digest = MessageDigest.getInstance(ALGORISME_HASH);
+        byte[] keyHash = digest.digest(password.getBytes("UTF-8"));
+
+        // Desxifrar.
+        SecretKeySpec keySpec = new SecretKeySpec(keyHash, ALGORISME_XIFRAT);
+        Cipher cipher = Cipher.getInstance(FORMAT_AES);
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+        byte[] decrypted = cipher.doFinal(encrypted);
+
+        // return String desxifrat
+        return new String(decrypted, "UTF-8");
     }
 
     // MAIN
