@@ -10,6 +10,28 @@ public class XifradorAES implements Xifrador {
     public static final String FORMAT_AES = "AES/CBC/PKCS5Padding";
     private static final int MIDA_IV = 16;
     
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        try {
+            byte[] resultado = xifraAES(msg, clau);
+            return new TextXifrat(resultado);
+        } catch (Exception e) {
+            System.err.println("Error en xifrat AES: " + e.getMessage());
+            System.exit(1);
+            return null;
+        }
+    }
+    
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        try {
+            return desxifraAES(xifrat.getBytes(), clau);
+        } catch (Exception e) {
+            System.err.println("Error en desxifrat AES: " + e.getMessage());
+            System.exit(1);
+            return null;
+        }
+    }
 
 
     public byte[] xifraAES(String msg, String clau) throws Exception {

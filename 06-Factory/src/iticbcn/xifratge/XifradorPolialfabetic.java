@@ -10,6 +10,29 @@ public class XifradorPolialfabetic implements Xifrador{
     private char[] permutacio;  
     private long clauSecreta = 8;
 
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        long clauSecreta = convertirClau(clau);
+        initRandom(clauSecreta);
+        String resultado = xifraPoliAlfa(msg);
+        return new TextXifrat(resultado.getBytes());
+    }
+    
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        long clauSecreta = convertirClau(clau);
+        initRandom(clauSecreta);
+        String texto = new String(xifrat.getBytes());
+        return desxifraPoliAlfa(texto);
+    }
+    
+    private long convertirClau(String clau) throws ClauNoSuportada {
+        try {
+            return Long.parseLong(clau);
+        } catch (NumberFormatException e) {
+            throw new ClauNoSuportada("XifradorPolialfabetic només admet claus numèriques");
+        }
+    }
 
     public void initRandom(long clauSecreta) {
         this.clauSecreta = clauSecreta;

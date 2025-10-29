@@ -24,6 +24,23 @@ public class XifradorMonoalfabetic implements Xifrador{
         return resultado;
     }
 
+    @Override
+    public TextXifrat xifra(String msg, String clau) throws ClauNoSuportada {
+        if (clau != null) {
+            throw new ClauNoSuportada("XifradorMonoalfabetic no admet clau");
+        }
+        String resultado = xifraMonoAlfa(msg);
+        return new TextXifrat(resultado.getBytes());
+    }
+    
+    @Override
+    public String desxifra(TextXifrat xifrat, String clau) throws ClauNoSuportada {
+        if (clau != null) {
+            throw new ClauNoSuportada("XifradorMonoalfabetic no admet clau");
+        }
+        String texto = new String(xifrat.getBytes());
+        return desxifraMonoAlfa(texto);
+    }
     
     // XifraMonoAlfa
     public String xifraMonoAlfa(String cadena) {
