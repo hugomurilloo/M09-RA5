@@ -1,10 +1,8 @@
-// PD: acaba lo del formato del tiempo
 import java.security.MessageDigest;
 import java.security.spec.KeySpec;
 import java.util.HexFormat;
 
 import javax.crypto.SecretKeyFactory;
-
 import javax.crypto.spec.PBEKeySpec;
 
 public class Hashes {
@@ -35,51 +33,53 @@ public class Hashes {
         return hex.formatHex(hash);
     }
     
-    // Força bruta per trobar la contrasenya
-    public String forcaBruta(String alg, String hash, String salt) throws Exception {
-        npass = 0;
-        String caracters = "abcdefABCDEF1234567890!";
-        int midaMaxima = 6;
+    // Mètode auxiliar per trobar password
+    private String pwTrobat(String alg, char[] aPw, int pos, char c, String hash, String salt) throws Exception {
+        aPw[pos] = c;
         
-        // Prova totes les mides (1 - 6 carac) -- cambiar
-        for (int mida = 1; mida <= midaMaxima; mida++) {
-
-            String resultat = forcaBrutaRecursiu(alg, hash, salt, caracters, "", mida);
-            if (resultat != null) {
-                return resultat;
-            }
-        }
-        
-        return null;
-    }
-    
-    // Força bruta
-    private String forcaBrutaRecursiu(String alg, String hashObjectiu, String salt, 
-                                     String caracters, String actual, int mida) throws Exception {
-        if (actual.length() == mida) {
+        if (pos == aPw.length - 1) {
+            // Tenim un password complet
             npass++;
+            String passwordActual = new String(aPw);
             
             // Calcula hash
             String hashProva;
             if (alg.equals("SHA-512")) {
-                hashProva = getSHA512AmbSalt(actual, salt);
+                hashProva = getSHA512AmbSalt(passwordActual, salt);
             } else {
-                hashProva = getPBKDF2AmbSalt(actual, salt);
+                hashProva = getPBKDF2AmbSalt(passwordActual, salt);
             }
             
             // Comprova si coincideix
-            if (hashProva.equals(hashObjectiu)) {
-                return actual;
+            if (hashProva.equals(hash)) {
+                return passwordActual;
             }
-            return null;
+        } else {
+            // Seguent posicio
+            String charset = "abcdefABCDEF1234567890!";
+            for (int i = 0; i < charset.length(); i++) {
+                String result = pwTrobat(alg, aPw, pos + 1, charset.charAt(i), hash, salt);
+                if (result != null) {
+                    return result;
+                }
+            }
         }
-        
-        // Prova tots els caracters -- cambiar
-        for (int i = 0; i < caracters.length(); i++) {
-            char c = caracters.charAt(i);
-            String resultat = forcaBrutaRecursiu(alg, hashObjectiu, salt, caracters, actual + c, mida);
-            if (resultat != null) {
-                return resultat;
+        return null;
+    }
+    
+    // Força bruta per trobar la contrasenya
+    public String forcaBruta(String alg, String hash, String salt) throws Exception {
+        npass = 0;
+        String charset = "abcdefABCDEF1234567890!";
+        String pw = null;
+
+        // Prova totes les longituds de 6 a 1 (asi tarda menos comienza de largo a pequeño)
+        for (int len = 6; len >= 1; len--) {
+            char[] aPw = new char[len];
+            
+            for (int i0 = 0; i0 < charset.length(); i0++) {
+                if ((pw = pwTrobat(alg, aPw, 0, charset.charAt(i0), hash, salt)) != null)
+                    return pw;
             }
         }
         
